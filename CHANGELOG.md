@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.1.1
+
+一行式安装 + 可移植性修复。
+
+- 新增 `bootstrap.ps1` / `bootstrap.sh`：一条命令完成下载 → 安装 → 装依赖（`irm ... | iex` / `curl ... | bash`）
+- `install.ps1` / `install.sh` 自动把 `pypdfium2`、`Pillow` 装进技能自带 `_pylibs`（不再要求找对解释器）
+- 修复 `.ps1` 中文编码问题（改为 UTF-8 with BOM，Windows PowerShell 5.1 可正常解析）
+- 移除脚本中硬编码的开发者路径（`render_pdf.py`、`contact_sheet.py`、`pdfcore.py`、`reportlab-engine.py`
+  改为基于 cwd / 脚本目录）
+- README：加 CI / License / Python 徽章、"一行安装"与"没有 AI agent 怎么办"章节
+- LICENSE 填入作者；新增 `.gitattributes` 的 `*.ps1 eol=crlf`
+
 ## 0.1.0
 
 首个公开版本。

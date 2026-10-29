@@ -3,7 +3,7 @@
 import re, zlib, os, json, sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-WS = r"C:\Users\LIUXINYU\Desktop\专利相似性"
+WS = os.getcwd()
 PDF = os.environ.get("PDFCORE_PDF") or os.path.join(WS, "source.pdf")
 data = open(PDF, "rb").read()
 

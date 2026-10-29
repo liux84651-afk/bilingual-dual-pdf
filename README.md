@@ -10,6 +10,10 @@ Also emits an editable Markdown source. Designed for **low token cost** in LLM a
 
 ![preview](docs/preview.png)
 
+[![CI](https://github.com/liux84651-afk/bilingual-dual-pdf/actions/workflows/ci.yml/badge.svg)](https://github.com/liux84651-afk/bilingual-dual-pdf/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue)
+
 ---
 
 ## 为什么用它
@@ -26,6 +30,24 @@ Also emits an editable Markdown source. Designed for **low token cost** in LLM a
 ---
 
 ## 快速开始
+
+### 最快：一行安装（DSH / Claude Code 用户）
+
+```powershell
+# Windows：下载 -> 装到 ~/.dsh/skills -> 自动把 pypdfium2/Pillow 装进技能目录
+irm https://raw.githubusercontent.com/liux84651-afk/bilingual-dual-pdf/main/bootstrap.ps1 | iex
+```
+
+```bash
+# macOS / Linux
+curl -fsSL https://raw.githubusercontent.com/liux84651-afk/bilingual-dual-pdf/main/bootstrap.sh | bash
+```
+
+装完 **重启会话** → 技能列表出现 `bilingual-dual-pdf` → 把 PDF 丢给 agent 说
+「把这个 PDF 做成中英对照」即可。其他方式：`install.ps1 -Target project|claude|core`、
+`install.sh --target ...`（见 [docs/INSTALL.md](docs/INSTALL.md)）。
+
+### 手动跑脚本
 
 ```bash
 # 0) 依赖（Python 3.10+）
@@ -96,6 +118,19 @@ segments + trans_N.json ──translate_chunks.py──► translations.json
 详见 [docs/WORKFLOW.md](docs/WORKFLOW.md)；省 token 的量化对比见
 [docs/TOKEN-BUDGET.md](docs/TOKEN-BUDGET.md)；踩坑记录见
 [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md)。
+
+---
+
+## 没有 AI agent 怎么办
+
+本工具**不自带翻译**：它负责「抽取 → 切块 → 合并 → 排版」，翻译这一步默认交给 agent（subagent）。
+如果你没有 agent，两种办法：
+
+1. **手动/用任意聊天 LLM 翻译**：`translate_chunks.py split --parts 3` 会生成 `work/chunk1..3.txt`，
+   把每个文件贴给任意 LLM，说「逐段译成中文，保留 `<<id>>` 标记」，把它返回的 JSON 存成
+   `work/trans_1.json`（格式 `{"p001": "……"}`），然后 `translate_chunks.py merge --work work`。
+2. **用带 API 的脚本**：仓库目前未内置 API 翻译器（可自行在 `translate_chunks.py` 的 merge 前后
+   接一层 OpenAI/DeepL 调用）；需要的话欢迎 PR。
 
 ---
 

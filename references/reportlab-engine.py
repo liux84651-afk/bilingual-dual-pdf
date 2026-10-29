@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Build the bilingual (EN left / ZH right) comparison PDF with reportlab."""
 import json, os, re, sys
-WS = r"C:\Users\LIUXINYU\Desktop\专利相似性"
+WS = os.getcwd()  # 改为你的工作目录
 sys.path.insert(0, os.path.join(WS, "_pylibs"))
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
