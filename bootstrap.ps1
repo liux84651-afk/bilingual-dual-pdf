@@ -36,9 +36,11 @@ if (-not (Test-Path $installer)) { throw "install.ps1 not found in package" }
 
 $target = if ($Project) { "project" } else { "user" }
 Write-Host "[2/3] running installer (target=$target)"
-$argList = @("-Target", $target)
+$argList = @("-Target", $target, "-Source", $src.FullName)
 if ($NoDeps) { $argList += "-NoDeps" }
-& $installer @argList
+# Run via scriptblock so ExecutionPolicy does not block the downloaded .ps1
+$code = Get-Content -LiteralPath $installer -Raw
+& ([scriptblock]::Create($code)) @argList
 
 Write-Host "[3/3] cleaning temp files"
 Remove-Item $tmp -Recurse -Force -ErrorAction SilentlyContinue

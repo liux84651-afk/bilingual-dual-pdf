@@ -14,11 +14,13 @@ param(
   [ValidateSet("user", "project", "claude", "core")]
   [string]$Target = "user",
   [switch]$Uninstall,
-  [switch]$NoDeps
+  [switch]$NoDeps,
+  [string]$Source = ""
 )
 
 $ErrorActionPreference = "Stop"
-$src  = Split-Path -Parent $MyInvocation.MyCommand.Path
+# When run from a file, use the script directory; bootstrap passes -Source explicitly.
+if ($Source) { $src = $Source } else { $src = Split-Path -Parent $MyInvocation.MyCommand.Path }
 $name = "bilingual-dual-pdf"
 
 function Get-Dest([string]$t) {
