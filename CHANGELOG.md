@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.4
+
+- bootstrap: 用 hashtable splat 传命名参数（数组 splat 会变成位置参数，导致 -Target 校验失败）
+
+## 0.1.3
+
+- bootstrap: 改用 scriptblock 执行下载的 install.ps1，绕过 ExecutionPolicy 限制
+- install.ps1: 新增 -Source 参数（scriptblock 模式下 \System.Management.Automation.InvocationInfo.MyCommand.Path 为空）
+
 ## 0.1.2
 
 修复「一行式安装」在 Windows PowerShell 5.1 下不可用的问题。
