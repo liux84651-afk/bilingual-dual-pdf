@@ -1,12 +1,15 @@
-﻿# 安装 bilingual-dual-pdf 技能（Windows PowerShell）
+# Install the bilingual-dual-pdf skill (Windows PowerShell)
 #
-# 用法:
-#   .\install.ps1                    # 用户级 DSH: ~/.dsh/skills/，并自动装依赖
-#   .\install.ps1 -Target project    # 项目级: ./.dsh/skills/
+# Usage:
+#   .\install.ps1                    # user-level DSH: ~/.dsh/skills/ + auto deps
+#   .\install.ps1 -Target project    # project-level: ./.dsh/skills/
 #   .\install.ps1 -Target claude     # ~/.claude/skills/
-#   .\install.ps1 -Target core       # 用户级 + 写入 ~/.dsh/AGENTS.md 触发规则
-#   .\install.ps1 -NoDeps            # 跳过自动安装 pypdfium2/Pillow
+#   .\install.ps1 -Target core       # user-level + append trigger rule to ~/.dsh/AGENTS.md
+#   .\install.ps1 -NoDeps            # skip pypdfium2/Pillow auto-install
 #   .\install.ps1 -Uninstall
+#
+# NOTE: this file is intentionally ASCII-only (no BOM) so that
+#       `irm .../bootstrap.ps1 | iex` works in Windows PowerShell 5.1.
 param(
   [ValidateSet("user", "project", "claude", "core")]
   [string]$Target = "user",
@@ -27,11 +30,12 @@ function Get-Dest([string]$t) {
   }
 }
 
-# 优先使用 DSH 自带的 Python（agent 实际调用的那个），其次 PATH 上的 python
+# Prefer the Python bundled with DSH (the one the agent actually calls), then PATH python.
 function Find-Python {
   $cands = @()
   $cands += (Join-Path $env:USERPROFILE ".dsh\dsh-runtimes\dsh-primary-runtime\dependencies\python\python.exe")
   $cands += (Join-Path $env:LOCALAPPDATA "Programs\Python\Python312\python.exe")
+  $cands += (Join-Path $env:LOCALAPPDATA "Programs\Python\Python311\python.exe")
   $onPath = Get-Command python -ErrorAction SilentlyContinue
   if ($onPath) { $cands += $onPath.Source }
   foreach ($c in $cands) { if ($c -and (Test-Path $c)) { return $c } }
@@ -40,8 +44,8 @@ function Find-Python {
 
 $dest = Get-Dest $Target
 if ($Uninstall) {
-  if (Test-Path $dest) { Remove-Item $dest -Recurse -Force; Write-Host "已移除: $dest" }
-  else { Write-Host "未安装: $dest" }
+  if (Test-Path $dest) { Remove-Item $dest -Recurse -Force; Write-Host "removed: $dest" }
+  else { Write-Host "not installed: $dest" }
   exit 0
 }
 
@@ -51,22 +55,22 @@ foreach ($d in @("scripts", "templates", "references")) {
   $p = Join-Path $src $d
   if (Test-Path $p) { Copy-Item $p $dest -Recurse -Force }
 }
-Write-Host "[1/3] 已安装到: $dest"
+Write-Host "[1/3] installed to: $dest"
 
-# 依赖装进技能自带 _pylibs（脚本会自动加入 sys.path），不污染全局环境
+# Dependencies go into <skill>/_pylibs (scripts add it to sys.path); no global env changes.
 if (-not $NoDeps) {
   $py = Find-Python
   if (-not $py) {
-    Write-Warning "[2/3] 未找到 Python。请手动安装 Python 3.10+ 后执行:"
+    Write-Warning "[2/3] Python not found. Install Python 3.10+ then run:"
     Write-Warning "      python -m pip install --target `"$dest\_pylibs`" pypdfium2 Pillow"
   } else {
     $lib = Join-Path $dest "_pylibs"
     New-Item -ItemType Directory -Force -Path $lib | Out-Null
-    Write-Host "[2/3] 安装依赖到 $lib"
-    Write-Host "      使用: $py"
+    Write-Host "[2/3] installing deps into $lib"
+    Write-Host "      python: $py"
     & $py -m pip install --no-cache-dir --quiet --upgrade --target $lib pypdfium2 Pillow
     if ($LASTEXITCODE -ne 0) {
-      Write-Warning "      自动安装失败，请手动执行:"
+      Write-Warning "      auto-install failed. run manually:"
       Write-Warning "      & `"$py`" -m pip install --target `"$lib`" pypdfium2 Pillow"
     } else {
       $libf = $lib -replace '\\', '/'
@@ -74,35 +78,34 @@ if (-not $NoDeps) {
     }
   }
 } else {
-  Write-Host "[2/3] 跳过依赖安装 (-NoDeps)"
+  Write-Host "[2/3] skipped deps (-NoDeps)"
 }
 
 if ($Target -eq "core") {
   $agents = Join-Path $env:USERPROFILE ".dsh\AGENTS.md"
   $marker = "bilingual-dual-pdf"
-  # 用数组拼装，避免 here-string 在部分 PowerShell 版本下的解析问题
   $ruleLines = @(
     '',
-    '## 中英对照 / 双语 PDF —— 一律走 `bilingual-dual-pdf` skill',
+    '## Bilingual PDF requests: always use the `bilingual-dual-pdf` skill',
     '',
-    '当用户提供**一个 PDF** 并要求「中英对照 / 双语对照 / 左边英文右边中文 / 逐段对照」时，必须：',
-    '1. 先加载 `bilingual-dual-pdf` 技能，按其五步流水线执行（extract → crop_assets → translate_chunks + subagent → mdgen/md2pdf → verify）；',
-    '2. 默认 Markdown 后端，交付 `<主题>_中英对照.md` + `<主题>_中英对照.pdf`；',
-    '3. 不把正文 dump 进对话，读图最多 1~2 张 contact sheet，翻译交给 subagent 并行。',
-    '例外：扫描件（无文本层）需先 OCR。',
+    'When the user provides a PDF and asks for a bilingual / side-by-side version, you MUST:',
+    '1. load the `bilingual-dual-pdf` skill and follow its 5-step pipeline (extract -> crop_assets -> translate_chunks + subagent -> mdgen/md2pdf -> verify);',
+    '2. default to the Markdown backend and deliver a .md source + .pdf result;',
+    '3. never dump the extracted body text into the conversation, read at most 1-2 contact sheets, and delegate translation to subagents.',
+    'Exception: scanned PDFs without a text layer need OCR first.',
     ''
   )
   $rule = $ruleLines -join "`r`n"
   if ((Test-Path $agents) -and (Select-String -Path $agents -Pattern $marker -SimpleMatch -Quiet)) {
-    Write-Host "[3/3] AGENTS.md 已包含规则，跳过"
+    Write-Host "[3/3] AGENTS.md already contains the rule, skipped"
   } else {
     Add-Content -Path $agents -Value $rule -Encoding UTF8
-    Write-Host "[3/3] 已写入触发规则: $agents"
+    Write-Host "[3/3] appended trigger rule: $agents"
   }
 } else {
-  Write-Host "[3/3] 完成"
+  Write-Host "[3/3] done"
 }
 
 Write-Host ""
-Write-Host "下一步：重启会话（技能列表出现 $name），然后对 agent 说："
-Write-Host "  「用 $name 把这个 PDF 做成中英对照」"
+Write-Host "Next: restart your session (skill list shows $name), then tell the agent:"
+Write-Host "  `"use $name to make a bilingual version of this PDF`""

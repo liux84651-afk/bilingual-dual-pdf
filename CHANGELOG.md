@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.2
+
+修复「一行式安装」在 Windows PowerShell 5.1 下不可用的问题。
+
+- `.ps1` 改为 **ASCII-only、无 BOM**：`irm .../bootstrap.ps1 | iex` 不再因 BOM 字符导致 `param()` 解析失败
+- 安装脚本提示信息改为英文（中文文档保留在 README / docs / install.sh）
+- 依赖安装仍然自动进行（装进 `<skill>/_pylibs`）
+
 ## 0.1.1
 
 一行式安装 + 可移植性修复。
