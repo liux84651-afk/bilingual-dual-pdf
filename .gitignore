@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# 本地依赖（用 requirements.txt 安装，不入库）
+_pylibs/
+_pylibs_dev/
+
+# 工作目录产物（示例 demo 产物除外）
+work/
+*_work/
+*.log
+*.aux
+*.out
+*.toc
+*.synctex.gz
+
+# 仅保留示例产物
+!examples/demo/bilingual.md
+
+# 系统
+.DS_Store
+Thumbs.db
+desktop.ini

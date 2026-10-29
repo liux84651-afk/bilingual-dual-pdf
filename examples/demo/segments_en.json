@@ -1,0 +1,13 @@
+[
+ {"id": "p001", "kind": "title", "page": 1, "en": "A Tiny Demo Report on Solar Panel Efficiency"},
+ {"id": "p002", "kind": "authors", "page": 1, "en": "Jane Doe (a), John Smith (b)"},
+ {"id": "p003", "kind": "affil", "page": 1, "en": "a  Institute of Example Studies, Somewhere"},
+ {"id": "p004", "kind": "abstractlabel", "page": 1, "en": "Abstract"},
+ {"id": "p005", "kind": "abstract", "page": 1, "en": "This demo file exists only to show how the bilingual dual-PDF layout looks. It contains a heading, several paragraphs, a footnote and one table image. Every row pairs the original English sentence with its Chinese translation, and both cells start on the same baseline."},
+ {"id": "p006", "kind": "h1", "page": 2, "en": "1. Introduction"},
+ {"id": "p007", "kind": "para", "page": 2, "en": "Solar panel efficiency has improved steadily over the past two decades. The table below summarises three representative module types and their rated efficiencies. Numbers are copied verbatim from the datasheets, so the table is reproduced as an image rather than re-typeset."},
+ {"id": "p008", "kind": "para", "page": 2, "en": "A second paragraph demonstrates that long text wraps independently in each column: the English cell may occupy four lines while the Chinese cell occupies three, and the next row still starts below the taller of the two."},
+ {"id": "p009", "kind": "h2", "page": 3, "en": "2.1. Footnote handling"},
+ {"id": "p010", "kind": "para", "page": 3, "en": "Footnotes are kept next to the text that references them and are typeset at a smaller size in both languages, which keeps the strict row alignment intact."},
+ {"id": "p011", "kind": "footnote", "page": 3, "en": "1 The demo data in this file is synthetic and was written for documentation purposes only."}
+]

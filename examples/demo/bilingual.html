@@ -1,0 +1,36 @@
+<!doctype html><html><head><meta charset='utf-8'><title>bilingual.md</title><style>
+@page { size: A4; margin: 14mm 13mm 13mm 13mm; }
+* { box-sizing: border-box; }
+body { margin:0; font-family: "Times New Roman","SimSun",serif; font-size:8.4pt; line-height:1.34; color:#111; }
+h1 { font-size:15pt; text-align:center; margin:0 0 2pt 0; line-height:1.2; }
+h2.zh-title { font-size:14pt; text-align:center; margin:0 0 8pt 0; }
+.front { text-align:center; margin:2pt 0 5pt 0; }
+.front .zh { color:#333; }
+.abs { text-align:justify; margin:2pt 0 4pt 0; padding:0 4mm; }
+.abs .zh { color:#333; }
+hr { border:0; border-top:.5pt solid #bbb; margin:8pt 0; }
+table { width:100%; border-collapse:collapse; table-layout:fixed; }
+td { width:50%; vertical-align:top; padding:0 0 3.2pt 0; text-align:justify;
+     word-break:break-word; overflow-wrap:anywhere; }
+td.en { padding-right:6mm; }
+td.zh { padding-left:6mm; border-left:.3pt solid #e6e6e6; }
+tr.head td { font-weight:bold; font-size:9.6pt; line-height:1.28; padding-top:6pt; padding-bottom:2.6pt; }
+tr.cap td { font-size:7.4pt; line-height:1.3; color:#222; }
+tr.foot td { font-size:6.9pt; line-height:1.26; color:#333; }
+.lbl { font-weight:bold; font-size:8.6pt; margin:6pt 0 1pt 0; }
+figure { margin:5pt 0 2pt 0; page-break-inside:avoid; }
+figure img { display:block; max-width:100%; max-height:235mm; margin:0 auto; }
+tr { page-break-inside:avoid; }
+</style></head><body><h1>A Tiny Demo Report on Solar Panel Efficiency</h1>
+<h1>太阳能电池板效率微型演示报告</h1>
+<div class="front"><b>Jane Doe (a), John Smith (b)</b></div>
+<div class="front">Jane Doe（a），John Smith（b）</div>
+<div class="front">a  Institute of Example Studies, Somewhere</div>
+<div class="front">a 示例研究所，某地</div>
+<div class="lbl">Abstract　｜　摘要</div>
+<div class="abs">This demo file exists only to show how the bilingual dual-PDF layout looks. It contains a heading, several paragraphs, a footnote and one table image. Every row pairs the original English sentence with its Chinese translation, and both cells start on the same baseline.</div>
+<div class="abs">本演示文件仅用于展示双语逐段对照排版的效果。其中包含一个标题、若干段落、一条脚注以及一张表格图片。每一行都把英文原句与中文译文配成一对，左右两格从同一基线开始。</div>
+<hr>
+<table><tr><td class="en">English (original)</td><td class="zh">中文（译文）</td></tr><tr class="head"><td class="en"><b>1. Introduction</b></td><td class="zh"><b>1. 引言</b></td></tr><tr><td class="en">Solar panel efficiency has improved steadily over the past two decades. The table below summarises three representative module types and their rated efficiencies. Numbers are copied verbatim from the datasheets, so the table is reproduced as an image rather than re-typeset.</td><td class="zh">过去二十年间，太阳能电池板的效率稳步提升。下表概述了三种代表性组件类型及其额定效率。表中数字逐字取自产品数据表，因此表格以原图形式呈现，而非重新排版。</td></tr><tr><td class="en">A second paragraph demonstrates that long text wraps independently in each column: the English cell may occupy four lines while the Chinese cell occupies three, and the next row still starts below the taller of the two.</td><td class="zh">第二段用于说明长文本会在两栏中各自独立换行：英文单元格可能占四行，而中文单元格只占三行，下一行仍然从两者中较高者的下方开始。</td></tr><tr class="head"><td class="en"><b>2.1. Footnote handling</b></td><td class="zh"><b>2.1. 脚注的处理</b></td></tr><tr><td class="en">Footnotes are kept next to the text that references them and are typeset at a smaller size in both languages, which keeps the strict row alignment intact.</td><td class="zh">脚注会与引用它的正文放在一起，并在两种语言中都以较小字号排版，从而保持严格的行对齐。</td></tr><tr class="foot"><td class="en"><sup>1 The demo data in this file is synthetic and was written for documentation purposes only.</sup></td><td class="zh"><sup>1 本文件中的演示数据均为虚构，仅用于文档说明。</sup></td></tr></table>
+<figure><img src="assets/demo_table.png"></figure>
+<table><tr class="cap"><td class="en">Table 1. Rated efficiency of three module types.</td><td class="zh">表 1. 三种组件类型的额定效率对照。</td></tr></table></body></html>

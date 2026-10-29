@@ -1,0 +1,9 @@
+# 运行时依赖
+# 裁图 / PDF 校验（必需）
+pypdfium2>=4.30
+
+# 标准化图像处理（contact sheet、字体预览；verify.py 的可选依赖）
+Pillow>=9.0
+
+# 无浏览器、无 TeX 时的兜底渲染器（可选）
+# reportlab>=4.0
